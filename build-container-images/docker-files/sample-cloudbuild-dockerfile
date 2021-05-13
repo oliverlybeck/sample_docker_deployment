@@ -1,5 +1,5 @@
 FROM nginx:latest
 
-COPY sample-cloudbuild-src/index.html /usr/share/nginx/html/
+COPY build-container-images/docker-files/sample-cloudbuild-src/index.html /usr/share/nginx/html/
 
 EXPOSE 80
