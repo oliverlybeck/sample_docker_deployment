@@ -22,11 +22,11 @@ steps:
 #   waitFor: ["-"]
 #   timeout: 3600s
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['run', 'deploy', 'erp-ui', '--image', 'gcr.io/$_PROJECT_NAME/$_IMAGE_NAME', '--region', '$_REGION', '--platform', 'managed', '--allow-unauthenticated']
-- name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
-  args: ['echo', 'testing that cloudbuilder runs and building $_IMAGE_NAME']
+  args: ['echo', 'testing that cloudbuilder runs and builds $_IMAGE_NAME', '&&', 'echo', 'deploying cloud run in region: ${_REGION}:']
   timeout: 10s
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['run', 'deploy', 'erp-ui', '--image', 'gcr.io/$_PROJECT_NAME/$_IMAGE_NAME', '--region', '$_REGION', '--platform', 'managed', '--allow-unauthenticated']
 
 availableSecrets:
   secretManager:
@@ -34,3 +34,22 @@ availableSecrets:
      env: 'PASSWORD'
    - versionName: projects/$_PROJECT_ID/secrets/DOCKERHUB_USERNAME/versions/1
      env: 'USERNAME'
+
+# To invoke with GitLab Ci:
+# Modify .gitlab-ci.yml and add the following:
+#
+# image: docker:latest
+
+# stages:
+#   - deploy
+
+# deploy:
+#   stage: deploy
+#   image: google/cloud-sdk
+#   services:
+#     - docker:dind
+#   script:
+#     - echo $GCP_SERVICE_KEY > gcloud-service-key.json # Google Cloud service accounts
+#     - gcloud auth activate-service-account --key-file gcloud-service-key.json
+#     - gcloud config set project $GCP_PROJECT_ID
+#     - gcloud builds submit . --config=cloudbuild.yaml
