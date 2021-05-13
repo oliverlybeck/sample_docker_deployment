@@ -2,7 +2,7 @@ steps:
 # Authenticate dockerhub user based on secrets vault in gcp to ensure that nginx gets pulled properly 
 - name: 'gcr.io/cloud-builders/docker'
   entrypoint: 'bash'
-  args: ['-c', 'docker login --username$$USERNAME --password=$$PASSWORD']
+  args: ['-c', 'docker login --username=$$USERNAME --password=$$PASSWORD']
   secretEnv: ['USERNAME', 'PASSWORD']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'gcr.io/$_PROJECT_NAME/$_IMAGE_NAME', '-f', 'build-container-images/docker-files/$_DOCKERFILE', '.']
