@@ -1,9 +1,14 @@
 steps:
+# Authenticate dockerhub user based on secrets vault in gcp to ensure that nginx gets pulled properly 
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/sample-cloudbuild-313610/$_IMAGENAME', '-f', 'build-container-images/docker-files/$_DOCKERFILE', '.']
+  entryoint: 'bash'
+  args: ['-c', 'docker login --username$$USERNAME --password=$$PASSWORD']
+  secretEnv: ['USERNAME', 'PASSWORD']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/$_PROJECT_NAME/$_IMAGE_NAME', '-f', 'build-container-images/docker-files/$_DOCKERFILE', '.']
   timeout: 500s
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/sample-cloudbuild-313610/$_IMAGENAME']  
+  args: ['push', 'gcr.io/$_PROJECT_NAME/$_IMAGE_NAME']  
 # - name: 'gcr.io/cloud-builders/kubectl'
 #   args: ['set', 'image', 'path/to/deployment_name', 'container_name=gcr.io/trio-test-241411/sample-nginx']
 #   env:
@@ -17,5 +22,12 @@ steps:
 #   waitFor: ["-"]
 #   timeout: 3600s
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['echo', 'testing that cloudbuilder runs and building $_IMAGENAME']
+  args: ['echo', 'testing that cloudbuilder runs and building $_IMAGE_NAME']
   timeout: 10s
+
+availableSecrets:
+  secretManager:
+   - versionName: projects/$_PROJECT_ID/secrets/DOCKERHUB_PASSWORD/versions/1
+     env: 'PASSWORD'
+   - versionName: projects/$_PROJECT_ID/secrets/DOCKERHUB_USERNAME/versions/1
+     env: 'USERNAME'
