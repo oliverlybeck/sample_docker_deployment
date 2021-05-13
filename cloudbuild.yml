@@ -23,7 +23,7 @@ steps:
 #   timeout: 3600s
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
-  args: ['echo', 'testing that cloudbuilder runs and builds $_IMAGE_NAME', '&&', 'echo', 'deploying cloud run in region: ${_REGION}:']
+  args: ['echo', 'testing that cloudbuilder runs and builds $_IMAGE_NAME and deploying webapp in region: $_REGION']
   timeout: 10s
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['run', 'deploy', 'erp-ui', '--image', 'gcr.io/$_PROJECT_NAME/$_IMAGE_NAME', '--region', '$_REGION', '--platform', 'managed', '--allow-unauthenticated']
