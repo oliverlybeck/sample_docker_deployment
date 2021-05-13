@@ -1,9 +1,9 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/trio-test-241411/sample-nginx', '-f', 'htrak/build-container-images/docker-files/sample-cloudbuild-dockerfile']
+  args: ['build', '-t', 'gcr.io/sample-cloudbuild-313610/$_IMAGENAME', '-f', 'build-container-images/docker-files/$_DOCKERFILE', '.']
   timeout: 500s
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/trio-test-241411/sample-nginx']  
+  args: ['push', 'gcr.io/sample-cloudbuild-313610/$_IMAGENAME']  
 # - name: 'gcr.io/cloud-builders/kubectl'
 #   args: ['set', 'image', 'path/to/deployment_name', 'container_name=gcr.io/trio-test-241411/sample-nginx']
 #   env:
@@ -17,5 +17,5 @@ steps:
 #   waitFor: ["-"]
 #   timeout: 3600s
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['echo', 'testing that cloudbuilder runs']
+  args: ['echo', 'testing that cloudbuilder runs and building $_IMAGENAME']
   timeout: 10s
