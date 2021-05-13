@@ -1,0 +1,21 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/trio-test-241411/sample-nginx', '-f', 'htrak/build-container-images/docker-files/sample-cloudbuild-dockerfile']
+  timeout: 500s
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/trio-test-241411/sample-nginx']  
+# - name: 'gcr.io/cloud-builders/kubectl'
+#   args: ['set', 'image', 'path/to/deployment_name', 'container_name=gcr.io/trio-test-241411/sample-nginx']
+#   env:
+#   - 'CLOUDSDK_COMPUTE_ZONE=eu-west-1b'
+#   - 'CLOUDSDK_CONTAINER_CLUSTER'=triometric-customer-cluster
+# - name: 'gcr.io/cloud-builders/gcloud'
+#   env:
+#     SERVICE_ACCOUNT: ${{ secret.GCP_SERVICE_ACCOUNT }}
+#   entrypoint: 'bash'
+#   args: ["./htrak/path/to/somescript.sh"]
+#   waitFor: ["-"]
+#   timeout: 3600s
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['echo', 'testing that cloudbuilder runs']
+  timeout: 10s
